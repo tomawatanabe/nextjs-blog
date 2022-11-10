@@ -7,6 +7,7 @@ import { getSortedPostsData } from '../lib/posts';
 
 export async function getStaticProps() {
   const allPostsData = getSortedPostsData();
+  //Pass an array of post data into the page component as props
   return {
     props: {
       allPostsData,
@@ -14,6 +15,7 @@ export async function getStaticProps() {
   };
 }
 
+//propsのobjectの型をgenericsで書く
 const Home: FC<{
   allPostsData: Array<{
     id: string;
