@@ -3,8 +3,35 @@ import { getAllPostIds, getPostData } from '../../lib/posts'
 import Head from 'next/head';
 import Date from '../../components/date';
 import utilStyles from '../../styles/utils.module.css'
+import { FC, ReactElement } from 'react';
+import { GetStaticPaths, GetStaticProps } from 'next';
 
-export default function Post({ postData }) {
+export const getStaticPaths: GetStaticPaths = async () => {
+    //**getAllPostIds()でparams: {id: fileName.replace(/\.md$/, '')}を受け取る
+    const paths = getAllPostIds();
+    return {
+        paths,
+        fallback: false,
+    }
+}
+
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+    //オプショナルチェーン？
+    const postData = await getPostData(params?.id as string);
+    return {
+        props: {
+            postData,
+        },
+    }
+}
+
+const Post: FC<{
+    postData: {
+        title: string;
+        date: string;
+        contentHtml: string;
+    }
+}> = ({ postData }): ReactElement => {
     return (
         <Layout>
             <Head>
@@ -24,21 +51,4 @@ export default function Post({ postData }) {
     );
 }
 
-//getAllPostIdsを用いてここでparamsを受け取る
-export async function getStaticPaths() {
-    const paths = getAllPostIds();
-    return {
-        paths,
-        fallback: false,
-    }
-}
-
-export async function getStaticProps({ params }) {
-    // なぜawaitが必要か？
-    const postData = await getPostData(params.id);
-    return {
-        props: {
-            postData,
-        },
-    }
-}
+export default Post;

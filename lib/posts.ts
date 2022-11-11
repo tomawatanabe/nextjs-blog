@@ -30,7 +30,7 @@ export function getSortedPostsData() {
         return {
             //省略表記=>key id,title,dateのobjectになる
             id,
-            ...matterResult.data,
+            ...(matterResult.data as { date: string; title: string }),
         };
     });
     // Sort posts by date
@@ -56,8 +56,7 @@ export function getAllPostIds() {
     })
 }
 
-
-export async function getPostData(id) {
+export async function getPostData(id: string) {
     const fullPath = path.join(postsDirectory, `${id}.md`)
     const fileContents = fs.readFileSync(fullPath, 'utf8')
 
@@ -76,6 +75,7 @@ export async function getPostData(id) {
     return {
         id,
         contentHtml,
+        // ...matterResult.dataはtitleとdate
         ...matterResult.data,
     }
 }

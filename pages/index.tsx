@@ -17,6 +17,19 @@ export async function getStaticProps() {
 }
 
 //propsのobjectの型をgenericsで書く
+
+// こういう書き方もできる
+// export default function Home({
+//   allPostsData
+// }: {
+//   allPostsData: {
+//     date: string
+//     title: string
+//     id: string
+//   }[]
+// }) {
+//   return 
+
 const Home: FC<{
   allPostsData: Array<{
     id: string;
@@ -41,7 +54,7 @@ const Home: FC<{
       <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
         <h2 className={utilStyles.headingLg}>Blog</h2>
         <ul className={utilStyles.list}>
-          {allPostsData.map(({ id, date, title }: any) => (
+          {allPostsData.map(({ id, date, title }) => (
             <li className={utilStyles.listItem} key={id}>
               <Link href={`/posts/${id}`}>{title}</Link>
               <br />
